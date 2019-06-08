@@ -1,2 +1,22 @@
-# google-photos-sync-check
-Check if your local photos are properly sync'd with your Google Photos
+# Google Photos Sync Check
+
+Python 3
+
+https://developers.google.com/photos/library/guides/get-started#enable-the-api
+
+save client_secret.json to this dir
+
+## Run
+
+```bash
+pipenv install --ignore-pipfile
+pipenv shell
+python google-photos-sync-check.py
+```
+
+## Test
+
+```bash
+pipenv shell
+python -m pytest
+```
