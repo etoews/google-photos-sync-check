@@ -1,4 +1,6 @@
-class Album:
+from models.base import Base
+
+class Album():
     def __init__(self, album_id, title, product_url):
         self.id = album_id
         self.title = title
@@ -14,24 +16,25 @@ class Album:
 
         return self.id == other.id
 
-    def get_unique_filename(self, filename):
+    def _get_unique_filename(self, filename):
         index_of_last_dot = filename.rfind('.')
         filename_without_extension = filename[:index_of_last_dot]
         extension = filename[index_of_last_dot+1:]
 
-        for i in range(1, 1000):
-            unique_filename = "{}({}).{}".format(filename_without_extension, i, extension)
+        for n in range(1, 1000):
+            # the "{filename_without_extension}({n}).{extension}" format is how Google Takeout does unique filenames
+            unique_filename = f"{filename_without_extension}({n}).{extension}"
             if not unique_filename in self.media_items:
                 return unique_filename
             else:
                 continue
 
-    def insert_media_item(self, media_item):
+    def add_media_item(self, media_item):
         if not media_item.filename in self.media_items:
             self.media_items[media_item.filename] = media_item
         else:
-            # TODO: media_item.filename = unique_filename ???
-            unique_filename = self.get_unique_filename(media_item.filename)
+            unique_filename = self._get_unique_filename(media_item.filename)
+            media_item.filename = unique_filename
             self.media_items[unique_filename] = media_item
 
 class MediaItem:
