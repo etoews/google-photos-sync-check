@@ -5,3 +5,6 @@ from sqlalchemy.orm import sessionmaker
 engine = create_engine('sqlite:///google-photos-sync-check.db')
 Session = sessionmaker(bind=engine)
 Base = declarative_base()
+
+def init():
+    Base.metadata.create_all(engine)

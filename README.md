@@ -20,3 +20,21 @@ python google-photos-sync-check.py
 pipenv shell
 python -m pytest
 ```
+
+## Notable
+
+* Git
+* Python 3.7
+* Pyenv
+* Pipenv
+* Google API Python Client
+* Generators
+* SQLAlchemy
+* SQLite
+* Structured logging
+* f strings
+* PyTest
+* Travis, ConcourseCI, CircleCI ???
+* VS Code
+* Python interpreter
+* Comments
