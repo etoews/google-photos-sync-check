@@ -35,6 +35,7 @@ python -m pytest
 * f strings
 * PyTest
 * Travis, ConcourseCI, CircleCI ???
+* coverage?
 * VS Code
 * Python interpreter
 * Comments

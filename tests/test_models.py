@@ -14,8 +14,10 @@ def test_add_media_item():
     album.add_media_item(media_item)
 
     assert len(album.media_items) == 1
+
     assert media_item_filename in album.media_items
     assert album.media_items[media_item_filename] == media_item
+    assert media_item.album == album
 
 def test_add_non_unique_media_item():
     media_item_filename = "GPTempDownload.jpg"
@@ -28,7 +30,11 @@ def test_add_non_unique_media_item():
     album.add_media_item(media_item_456)
 
     assert len(album.media_items) == 2
+
     assert media_item_filename in album.media_items
-    assert media_item_unique_filename in album.media_items
     assert album.media_items[media_item_filename] == media_item_123
+    assert media_item_123.album == album
+
+    assert media_item_unique_filename in album.media_items
     assert album.media_items[media_item_unique_filename] == media_item_456
+    assert media_item_456.album == album
