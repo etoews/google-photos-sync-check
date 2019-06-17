@@ -36,6 +36,7 @@ python -m pytest
 * PyTest
 * Travis, ConcourseCI, CircleCI ???
 * coverage?
+* PyLint
 * VS Code
 * Python interpreter
 * Comments

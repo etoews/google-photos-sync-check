@@ -2,6 +2,7 @@ from httplib2 import Http
 from googleapiclient.discovery import build
 from oauth2client import file, client, tools
 
+from models.base import Database
 from models.models import Album, MediaItem
 
 SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
@@ -57,11 +58,15 @@ def process_media_items_page(media_items_page):
 if __name__ == '__main__':
     photoslibrary = authn_and_authz()
 
+    db = Database('google-photos-sync-check')
+    session = db.get_session()
+
     # in this algorithm, the unit of work is the page rather than the individual album or media item
 
     album_pages = get_album_pages(photoslibrary)
     for album_page in album_pages:
         albums = process_album_page(album_page)
+        session.add_all(albums)
 
         for album in albums:
             media_items_pages = get_media_items_pages(photoslibrary, album)
@@ -69,7 +74,12 @@ if __name__ == '__main__':
 
             for media_items_page in media_items_pages:
                 media_items = process_media_items_page(media_items_page)
+                session.add_all(media_items)
 
                 for media_item in media_items:
                     album.add_media_item(media_item)
                     print(media_item.filename)
+
+        session.commit()
+
+    session.close()

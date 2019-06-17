@@ -1,10 +1,21 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///google-photos-sync-check.db')
-Session = sessionmaker(bind=engine)
 Base = declarative_base()
 
-def init():
-    Base.metadata.create_all(engine)
+class Database():
+    def __init__(self, name):
+        self.name = name
+        _engine = create_engine(f'sqlite:///{self.name}.db')
+        self.Session = sessionmaker(bind=_engine)
+        Base.metadata.create_all(_engine)
+
+    def get_session(self):
+        return self.Session()
+
+    def delete(self):
+        self.Session = None
+        os.remove(f'{self.name}.db')

@@ -52,9 +52,9 @@ class MediaItem(Base):
     __tablename__ = 'media_items'
 
     id = Column(String, primary_key=True)
+    album_id = Column(String, ForeignKey('albums.id'), primary_key=True, nullable=True)
     filename = Column(String)
     product_url = Column(String)
-    album_id = Column(String, ForeignKey('albums.id'))
 
     album = relationship('Album', back_populates='media_items')
 
@@ -84,7 +84,7 @@ class MediaItem(Base):
                     continue
 
     def __repr__(self):
-        return "{}".format(self.filename)
+        return self.filename
 
     def __eq__(self, other):
         if not isinstance(other, Album):
