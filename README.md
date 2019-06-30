@@ -6,12 +6,21 @@ https://developers.google.com/photos/library/guides/get-started#enable-the-api
 
 save client_secret.json to this dir
 
+## Clean
+
+```bash
+find . -name "*.DS_Store" -delete
+find . -name "*.json" -delete
+find . -name "*(*).HEIC" -delete
+```
+
 ## Run
 
 ```bash
 pipenv install --ignore-pipfile
 pipenv shell
-python google-photos-sync-check.py
+python google-photos-sync-check.py rebuild_db
+python google-photos-sync-check.py path_and_db ~/Pictures
 ```
 
 ## Test
