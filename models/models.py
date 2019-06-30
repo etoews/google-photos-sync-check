@@ -8,7 +8,7 @@ class Album(Base):
     __tablename__ = 'albums'
 
     id = Column(String, primary_key=True)
-    title = Column(String)
+    title = Column(String, index=True)
     product_url = Column(String)
 
     media_items = relationship('MediaItem', back_populates='album', collection_class=attribute_mapped_collection('filename'))
