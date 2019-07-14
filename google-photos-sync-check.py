@@ -60,30 +60,46 @@ def process_media_items_page(media_items_page):
         media_items.append(media_item)
     return media_items
 
+def normalise_album_title(album_title):
+    normalised_album_title = album_title.replace("_", "'")
+    normalised_album_title = normalised_album_title[:50]
+    return normalised_album_title
+
 def sync_check_path_and_db(args):
     path = args.path
     albums = {}
 
-    years = [name for name in listdir(path) if isdir(join(path, name))]
-    print(years)
+    db = Database('google-photos-sync-check')
+    session = db.get_session()
+
+    years = [year for year in listdir(path) if isdir(join(path, year))]
 
     for year in years:
         print(year)
 
         year_path = join(path, year)
-        album_names = [name for name in listdir(year_path) if isdir(join(year_path, name))]
+        album_titles = [title for title in listdir(year_path) if isdir(join(year_path, title))]
 
-        for album_name in album_names:
-            print(f"  {album_name}")
+        for album_title in album_titles:
+            album_title_query = normalise_album_title(album_title) + "%"
+            album = session.query(Album).filter(Album.title.like(album_title_query)).one_or_none()
 
-            album_path = join(year_path, album_name)
+            if album is None:
+                print(f"  {album_title} not in db")
+                continue
+            else:
+                print(f"  {album_title} in db")
+
+            album_path = join(year_path, album_title)
             media_item_names = [name for name in listdir(album_path) if isfile(join(album_path, name))]
-            albums[album_name] = media_item_names
+            albums[album_title] = media_item_names
 
             for media_item_name in media_item_names:
                 print(f"    {media_item_name}")
 
-def rebuild_db():
+    session.close()
+
+def rebuild_db(args):
     photoslibrary = authn_and_authz()
 
     db = Database('google-photos-sync-check')
@@ -117,11 +133,11 @@ def get_args():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
-    parser_path_and_db = subparsers.add_parser('path_and_db', help='Sync check between a local file path and the database')
-    parser_path_and_db.set_defaults(func=sync_check_path_and_db)
+    parser_path_and_db = subparsers.add_parser('path_and_db', help='Sync check between a local file path and the database of all albums and media items')
     parser_path_and_db.add_argument('path', type=str, help='Local file path to photo albums')
+    parser_path_and_db.set_defaults(func=sync_check_path_and_db)
 
-    parser_rebuild_db = subparsers.add_parser('rebuild_db', help='Rebuild the database')
+    parser_rebuild_db = subparsers.add_parser('rebuild_db', help='Rebuild the database of all albums and media items from the Google Photos API')
     parser_rebuild_db.set_defaults(func=rebuild_db)
 
     return parser.parse_args()

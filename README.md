@@ -30,22 +30,38 @@ pipenv shell
 python -m pytest
 ```
 
-## Notable
+## Things
 
+Development things:
 * Git
+* VS Code
+* Python interpreter
+* Comments
+
+Python things:
 * Python 3.7
 * Pyenv
 * Pipenv
-* Google API Python Client
-* Generators
-* SQLAlchemy
-* SQLite
-* Structured logging
+
+Python lang things:
 * f strings
+* list comprehensions
+* generators
+* argparse
+* logging?
+
+Database things:
+* SQLite
+* SQLAlchemy
+  * indexes
+  * relationships
+  * collection_class
+
+Testing things:
 * PyTest
 * Travis, ConcourseCI, CircleCI ???
 * coverage?
 * PyLint
-* VS Code
-* Python interpreter
-* Comments
+
+Library things:
+* Google API Python Client
