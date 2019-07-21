@@ -60,44 +60,54 @@ def process_media_items_page(media_items_page):
         media_items.append(media_item)
     return media_items
 
-def normalise_album_title(album_title):
-    normalised_album_title = album_title.replace("_", "'")
-    normalised_album_title = normalised_album_title[:50]
-    return normalised_album_title
-
-def sync_check_path_and_db(args):
-    path = args.path
-    albums = {}
-
-    db = Database('google-photos-sync-check')
-    session = db.get_session()
-
+def get_local_albums(path):
+    albums = []
     years = [year for year in listdir(path) if isdir(join(path, year))]
 
     for year in years:
-        print(year)
-
         year_path = join(path, year)
-        album_titles = [title for title in listdir(year_path) if isdir(join(year_path, title))]
 
-        for album_title in album_titles:
-            album_title_query = normalise_album_title(album_title) + "%"
-            album = session.query(Album).filter(Album.title.like(album_title_query)).one_or_none()
+        for title in listdir(year_path):
+            album_path = join(year_path, title)
 
-            if album is None:
-                print(f"  {album_title} not in db")
-                continue
-            else:
-                print(f"  {album_title} in db")
+            if isdir(album_path):
+                album = Album(None, title, album_path)
+                albums.append(album)
 
-            album_path = join(year_path, album_title)
-            media_item_names = [name for name in listdir(album_path) if isfile(join(album_path, name))]
-            albums[album_title] = media_item_names
+    return frozenset(albums)
 
-            for media_item_name in media_item_names:
-                print(f"    {media_item_name}")
+def get_db_albums(db):
+    session = db.get_session()
+
+    albums = session.query(Album)
 
     session.close()
+
+    return frozenset(albums)
+
+def sync_check(args):
+    path = args.path
+    local_albums = get_local_albums(path)
+
+    db = Database('google-photos-sync-check')
+    db_albums = get_db_albums(db)
+
+    print(f"diff:")
+    diff = local_albums.difference(db_albums)
+    for album in diff:
+        print(f"  {album}\t\t\t{album.__hash__()}")
+
+    print("\n")
+
+    print(f"local albums:")
+    for album in local_albums:
+        print(f"  {album}\t\t\t{album.__hash__()}")
+
+    print("\n")
+
+    print(f"db albums:")
+    for album in db_albums:
+        print(f"  {album}\t\t\t{album.__hash__()}")
 
 def rebuild_db(args):
     photoslibrary = authn_and_authz()
@@ -133,9 +143,9 @@ def get_args():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
 
-    parser_path_and_db = subparsers.add_parser('path_and_db', help='Sync check between a local file path and the database of all albums and media items')
+    parser_path_and_db = subparsers.add_parser('sync_check', help='Sync check between a local file path and the database of all albums and media items')
     parser_path_and_db.add_argument('path', type=str, help='Local file path to photo albums')
-    parser_path_and_db.set_defaults(func=sync_check_path_and_db)
+    parser_path_and_db.set_defaults(func=sync_check)
 
     parser_rebuild_db = subparsers.add_parser('rebuild_db', help='Rebuild the database of all albums and media items from the Google Photos API')
     parser_rebuild_db.set_defaults(func=rebuild_db)

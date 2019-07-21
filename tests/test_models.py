@@ -65,7 +65,7 @@ def test_persist_media_item(session):
 def test_persist_album_with_media_item(session):
     media_item = MediaItem("mediaitem001", "IMG_3673.JPG", "https://photos.google.com/lr/photo/mediaitem001")
 
-    album = Album("album001", "2019-03-26 - Dive - Mermaid's Kitchen East", "https://photos.google.com/lr/album/album001")
+    album = Album("album001", "2016-12-22 - Dive 1 - Cozumel", "https://photos.google.com/lr/album/album001")
     album.add_media_item(media_item)
 
     session.add(album)

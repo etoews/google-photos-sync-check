@@ -9,14 +9,14 @@ class Album(Base):
 
     id = Column(String, primary_key=True)
     title = Column(String, unique=True, index=True)
-    product_url = Column(String)
+    location = Column(String)
 
     media_items = relationship('MediaItem', back_populates='album', collection_class=attribute_mapped_collection('filename'))
 
-    def __init__(self, id, title, product_url):
+    def __init__(self, id, title, location):
         self.id = id
-        self.title = title
-        self.product_url = product_url
+        self.title = self._normalise_title(title)
+        self.location = location
 
     def add_media_item(self, media_item):
         if not media_item.filename in self.media_items:
@@ -39,6 +39,12 @@ class Album(Base):
             else:
                 continue
 
+    def _normalise_title(self, title):
+        # normalise the title because of how Google Takeout mangles the title
+        normalised_title = title.replace("_", "'")
+        normalised_title = normalised_title[:50]
+        return normalised_title
+
     def __repr__(self):
         return self.title
 
@@ -46,7 +52,13 @@ class Album(Base):
         if not isinstance(other, Album):
             return NotImplemented
 
-        return self.id == other.id
+        return self.title == other.title
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash(self.title)
 
 class MediaItem(Base):
     __tablename__ = 'media_items'
@@ -54,34 +66,15 @@ class MediaItem(Base):
     id = Column(String, primary_key=True)
     album_id = Column(String, ForeignKey('albums.id'), primary_key=True, nullable=True)
     filename = Column(String)
-    product_url = Column(String)
+    location = Column(String)
 
     album = relationship('Album', back_populates='media_items')
 
-    def __init__(self, id, filename, product_url):
+    def __init__(self, id, filename, location):
         self.id = id
         self.filename = filename
-        self.product_url = product_url
+        self.location = location
         self.album = None
-
-    def _get_unique_filename(self, filename, album):
-        if album is None:
-            return filename
-        elif not filename in album.media_items:
-            return filename
-        else:
-            index_of_last_dot = filename.rfind('.')
-            filename_without_extension = filename[:index_of_last_dot]
-            extension = filename[index_of_last_dot+1:]
-
-            for n in range(1, 1000):
-                # the "{filename_without_extension}({n}).{extension}" format is how Google Takeout does unique filenames
-                unique_filename = f"{filename_without_extension}({n}).{extension}"
-
-                if not unique_filename in album.media_items:
-                    return unique_filename
-                else:
-                    continue
 
     def __repr__(self):
         return self.filename

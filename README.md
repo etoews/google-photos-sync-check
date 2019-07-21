@@ -20,7 +20,7 @@ find . -name "*(*).HEIC" -delete
 pipenv install --ignore-pipfile
 pipenv shell
 python google-photos-sync-check.py rebuild_db
-python google-photos-sync-check.py path_and_db ~/Pictures
+python google-photos-sync-check.py sync_check ~/Pictures
 ```
 
 ## Test
@@ -30,38 +30,41 @@ pipenv shell
 python -m pytest
 ```
 
-## Things
+## Notable
 
-Development things:
+Development:
 * Git
 * VS Code
 * Python interpreter
-* Comments
+* Docs: [etoews.github.io/google-photos-sync-check/](https://etoews.github.io/google-photos-sync-check/)
 
-Python things:
+Python:
 * Python 3.7
 * Pyenv
 * Pipenv
+* [realpython.com](https://realpython.com/)
 
-Python lang things:
+Python lang:
 * f strings
 * list comprehensions
 * generators
 * argparse
+* sets
+* context managers
 * logging?
 
-Database things:
+Database:
 * SQLite
 * SQLAlchemy
   * indexes
   * relationships
   * collection_class
 
-Testing things:
+Testing:
 * PyTest
+* PyLint
 * Travis, ConcourseCI, CircleCI ???
 * coverage?
-* PyLint
 
-Library things:
+Library:
 * Google API Python Client
