@@ -77,11 +77,9 @@ def get_local_albums(path):
     return frozenset(albums)
 
 def get_db_albums(db):
-    session = db.get_session()
-
-    albums = session.query(Album)
-
-    session.close()
+    with db.session_context() as session:
+        # TODO: sort
+        albums = session.query(Album)
 
     return frozenset(albums)
 
@@ -113,31 +111,26 @@ def rebuild_db(args):
     photoslibrary = authn_and_authz()
 
     db = Database('google-photos-sync-check')
-    session = db.get_session()
 
     # in this algorithm, the unit of work is the page rather than the individual album or media item
-
     album_pages = get_album_pages(photoslibrary)
 
-    for album_page in album_pages:
-        albums = process_album_page(album_page)
-        session.add_all(albums)
+    with db.session_context() as session:
+        for album_page in album_pages:
+            albums = process_album_page(album_page)
+            session.add_all(albums)
 
-        for album in albums:
-            print(album.title)
-            media_items_pages = get_media_items_pages(photoslibrary, album)
+            for album in albums:
+                print(album.title)
+                media_items_pages = get_media_items_pages(photoslibrary, album)
 
-            for media_items_page in media_items_pages:
-                media_items = process_media_items_page(media_items_page)
-                session.add_all(media_items)
+                for media_items_page in media_items_pages:
+                    media_items = process_media_items_page(media_items_page)
+                    session.add_all(media_items)
 
-                for media_item in media_items:
-                    print(media_item.filename)
-                    album.add_media_item(media_item)
-
-        session.commit()
-
-    session.close()
+                    for media_item in media_items:
+                        print(media_item.filename)
+                        album.add_media_item(media_item)
 
 def get_args():
     parser = argparse.ArgumentParser()

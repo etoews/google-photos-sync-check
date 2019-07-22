@@ -1,5 +1,7 @@
 import os
 
+from contextlib import contextmanager
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -14,9 +16,18 @@ class Database():
         self.Session = sessionmaker(bind=_engine)
         Base.metadata.create_all(_engine)
 
-    # TODO: turn this into a context manager https://docs.sqlalchemy.org/en/13/orm/session_basics.html#when-do-i-construct-a-session-when-do-i-commit-it-and-when-do-i-close-it
-    def get_session(self):
-        return self.Session()
+    @contextmanager
+    def session_context(self):
+        """Provide a transactional scope around a series of operations."""
+        session = self.Session()
+        try:
+            yield session
+            session.commit()
+        except:
+            session.rollback()
+            raise
+        finally:
+            session.close()
 
     def delete(self):
         self.Session = None

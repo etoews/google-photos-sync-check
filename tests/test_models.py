@@ -36,45 +36,36 @@ def test_add_non_unique_media_item():
     assert album.media_items[media_item_unique_filename] == media_item_456
     assert media_item_456.album == album
 
-def test_persist_album(session):
+def test_persist_album(db):
     album = Album("album123", "2019-03-26 - Dive - Mermaid's Kitchen East", "https://photos.google.com/lr/album/album123")
 
-    session.add(album)
-    session.commit()
+    with db.session_context() as session:
+        session.add(album)
+        albums = session.query(Album).all()
 
-    albums = session.query(Album).all()
+        assert len(albums) == 1
+        assert albums[0].id == album.id
 
-    assert len(albums) == 1
-    assert albums[0].id == album.id
-
-    session.close()
-
-def test_persist_media_item(session):
+def test_persist_media_item(db):
     media_item = MediaItem("mediaitem123", "IMG_3673.JPG", "https://photos.google.com/lr/photo/mediaitem123")
 
-    session.add(media_item)
-    session.commit()
+    with db.session_context() as session:
+        session.add(media_item)
+        media_items = session.query(MediaItem).all()
 
-    media_items = session.query(MediaItem).all()
+        assert len(media_items) == 1
+        assert media_items[0].id == media_item.id
 
-    assert len(media_items) == 1
-    assert media_items[0].id == media_item.id
-
-    session.close()
-
-def test_persist_album_with_media_item(session):
+def test_persist_album_with_media_item(db):
     media_item = MediaItem("mediaitem001", "IMG_3673.JPG", "https://photos.google.com/lr/photo/mediaitem001")
-
     album = Album("album001", "2016-12-22 - Dive 1 - Cozumel", "https://photos.google.com/lr/album/album001")
     album.add_media_item(media_item)
 
-    session.add(album)
-    session.add(media_item)
-    session.commit()
+    with db.session_context() as session:
+        session.add(album)
+        session.add(media_item)
 
-    # albums = session.query(Album).all()
+        # albums = session.query(Album).all()
 
-    # assert len(albums) == 1
-    # assert albums[0].id == album.id
-
-    session.close()
+        # assert len(albums) == 1
+        # assert albums[0].id == album.id

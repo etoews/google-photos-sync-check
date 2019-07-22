@@ -50,7 +50,7 @@ Python lang:
 * generators
 * argparse
 * sets
-* context managers
+* context manager
 * logging?
 
 Database:
