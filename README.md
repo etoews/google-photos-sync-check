@@ -44,13 +44,15 @@ Python:
 * Pipenv
 * [realpython.com](https://realpython.com/)
 
-Python lang:
+Python lang features:
 * f strings
 * list comprehensions
 * generators
 * argparse
 * sets
 * context manager
+* glob
+* lambda
 * logging?
 
 Database:
