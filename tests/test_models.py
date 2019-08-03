@@ -19,6 +19,7 @@ def test_add_media_item():
 def test_add_non_unique_media_item():
     media_item_filename = "GPTempDownload.jpg"
     media_item_unique_filename = "GPTempDownload(1).jpg"
+
     media_item_123 = MediaItem("mediaitem123", media_item_filename, "https://photos.google.com/lr/photo/mediaitem123")
     media_item_456 = MediaItem("mediaitem456", media_item_filename, "https://photos.google.com/lr/photo/mediaitem456")
 
@@ -65,7 +66,7 @@ def test_persist_album_with_media_item(db):
         session.add(album)
         session.add(media_item)
 
-        # albums = session.query(Album).all()
+        albums = session.query(Album).all()
 
-        # assert len(albums) == 1
-        # assert albums[0].id == album.id
+        assert len(albums) == 1
+        assert albums[0].id == album.id
