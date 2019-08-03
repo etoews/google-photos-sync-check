@@ -5,6 +5,7 @@ from pathlib import Path
 from os.path import join
 
 from httplib2 import Http
+from jinja2 import Environment, PackageLoader
 from googleapiclient.discovery import build
 from oauth2client import file, client, tools
 
@@ -81,6 +82,7 @@ def get_local_albums(path):
 
 def get_db_albums(db):
     with db.session_context() as session:
+        # TODO: get albums like [0-9][0-9][0-9][0-9][ -]*
         albums = session.query(Album)
 
     return set(albums)
@@ -92,25 +94,19 @@ def sync_check(args):
     db = Database('google-photos-sync-check')
     db_albums = get_db_albums(db)
 
-    print(f"diff:")
-    diff = local_albums.difference(db_albums)
-    diff = sorted(diff, key=lambda x: getattr(x, 'title'))
-    for album in diff:
-        print(f"  {album}\t\t\t{album.__hash__()}")
+    local_albums_diff = local_albums.difference(db_albums)
+    local_albums_diff = sorted(local_albums_diff, key=lambda x: getattr(x, 'title'))
 
-    print("\n")
+    db_albums_diff = db_albums.difference(local_albums)
+    db_albums_diff = sorted(db_albums_diff, key=lambda x: getattr(x, 'title'))
 
-    print(f"local albums:")
-    local_albums = sorted(local_albums, key=lambda x: getattr(x, 'title'))
-    for album in local_albums:
-        print(f"  {album}\t\t\t{album.__hash__()}")
+    report(local_albums_diff, db_albums_diff)
 
-    print("\n")
+def report(local_albums_diff, db_albums_diff):
+    env = Environment(loader=PackageLoader('google-photos-sync-check', 'templates'))
+    template = env.get_template('report.html')
 
-    print(f"db albums:")
-    db_albums = sorted(db_albums, key=lambda x: getattr(x, 'title'))
-    for album in db_albums:
-        print(f"  {album}\t\t\t{album.__hash__()}")
+    print(template.render(local_albums_diff=local_albums_diff, db_albums_diff=db_albums_diff))
 
 def rebuild_db(args):
     photoslibrary = authn_and_authz()

@@ -1,0 +1,13 @@
+<html>
+    <h1>Local Albums Diff</h1>
+    <ul>
+        {% for album in local_albums_diff %}
+           <li>{{ album.title }}</li>{% endfor %}
+    </ul>
+
+    <h1>DB Albums Diff</h1>
+    <ul>
+        {% for album in db_albums_diff %}
+        <li>{{ album.title }}</li>{% endfor %}
+    </ul>
+</html>
