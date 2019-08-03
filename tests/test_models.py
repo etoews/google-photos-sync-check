@@ -37,6 +37,16 @@ def test_add_non_unique_media_item():
     assert album.media_items[media_item_unique_filename] == media_item_456
     assert media_item_456.album == album
 
+def test_normalising_title():
+    album = Album("album123", "2019-03-26 - Dive - Mermaid_s Kitchen East Evening Dive", None)
+
+    assert album.title == "2019-03-26 - Dive - Mermaid's Kitchen East Evening"
+
+def test_not_normalising_title():
+    album = Album("album123", "2019 - Day to Day", None)
+
+    assert album.title == "2019 - Day to Day"
+
 def test_persist_album(db):
     album = Album("album123", "2019-03-26 - Dive - Mermaid's Kitchen East", "https://photos.google.com/lr/album/album123")
 
