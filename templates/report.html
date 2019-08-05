@@ -1,13 +1,48 @@
-<html>
-    <h1>Local Albums Diff</h1>
-    <ul>
-        {% for album in local_albums_diff %}
-           <li>{{ album.title }}</li>{% endfor %}
-    </ul>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Google Photos Sync Check Report</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+  <body>
+    <div class="container">
+      <h2>Local Albums Diff</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for album in local_albums_diff %}
+          <tr>
+            <td>{{ album.title }}</td>
+            <td>{{ album.location }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-    <h1>DB Albums Diff</h1>
-    <ul>
-        {% for album in db_albums_diff %}
-        <li>{{ album.title }}</li>{% endfor %}
-    </ul>
+      <h2>DB Albums Diff</h1>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for album in db_albums_diff %}
+          <tr>
+            <td>{{ album.title }}</td>
+            <td>{{ album.location }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
 </html>

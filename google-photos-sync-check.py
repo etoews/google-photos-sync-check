@@ -106,7 +106,12 @@ def report(local_albums_diff, db_albums_diff):
     env = Environment(loader=PackageLoader('google-photos-sync-check', 'templates'))
     template = env.get_template('report.html')
 
-    print(template.render(local_albums_diff=local_albums_diff, db_albums_diff=db_albums_diff))
+    # TODO: mkdir reports
+
+    report = template.render(local_albums_diff=local_albums_diff, db_albums_diff=db_albums_diff)
+
+    with open("reports/report.html", "w") as report_file:
+        report_file.write(report)
 
 def rebuild_db(args):
     photoslibrary = authn_and_authz()

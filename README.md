@@ -42,7 +42,6 @@ Python:
 * Python 3.7
 * Pyenv
 * Pipenv
-* [realpython.com](https://realpython.com/)
 
 Python lang features:
 * f strings
@@ -71,3 +70,6 @@ Testing:
 Library:
 * Google API Python Client
 * Jinja
+
+Websites:
+* [realpython.com](https://realpython.com/)
