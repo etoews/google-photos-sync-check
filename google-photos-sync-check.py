@@ -1,5 +1,4 @@
-import argparse
-import glob
+import argparse, glob, os
 
 from pathlib import Path
 from os.path import join
@@ -8,6 +7,7 @@ from httplib2 import Http
 from jinja2 import Environment, PackageLoader
 from googleapiclient.discovery import build
 from oauth2client import file, client, tools
+from sqlalchemy import or_
 
 from models.base import Database
 from models.models import Album, MediaItem
@@ -82,8 +82,7 @@ def get_local_albums(path):
 
 def get_db_albums(db):
     with db.session_context() as session:
-        # TODO: get albums like [0-9][0-9][0-9][0-9][ -]*
-        albums = session.query(Album)
+        albums = session.query(Album).filter(or_(Album.title.like("____ -%"), Album.title.like("____-__-__%")))
 
     return set(albums)
 
@@ -106,10 +105,9 @@ def report(local_albums_diff, db_albums_diff):
     env = Environment(loader=PackageLoader('google-photos-sync-check', 'templates'))
     template = env.get_template('report.html')
 
-    # TODO: mkdir reports
-
     report = template.render(local_albums_diff=local_albums_diff, db_albums_diff=db_albums_diff)
 
+    os.makedirs("reports", exist_ok=True)
     with open("reports/report.html", "w") as report_file:
         report_file.write(report)
 
