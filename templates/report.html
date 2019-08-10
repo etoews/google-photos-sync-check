@@ -8,37 +8,50 @@
 </head>
   <body>
     <div class="container">
+      <h1>Google Photos Sync Check</h1>
+      <br/>
       <h2>Local Albums Diff</h1>
       <table class="table">
         <thead>
-          <tr>
-            <th>Title</th>
-            <th>Location</th>
+          <tr class="m-0">
+            <th class="w-75">Title</th>
+            <th class="w-25">Location</th>
           </tr>
         </thead>
         <tbody>
           {% for album in local_albums_diff %}
+          <tr class="m-0">
+            <td class="w-75">{{ album.title }}</td>
+            <td class="w-25"><a href="{{ album.location }}">Google Photos</a></td>
+          </tr>
+          {% else %}
           <tr>
-            <td>{{ album.title }}</td>
-            <td>{{ album.location }}</td>
+            <td class="w-75"><b>Albums in sync</b></td>
+            <td class="w-25"></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      <br/>
 
       <h2>DB Albums Diff</h1>
-      <table class="table">
+      <table class="table table-hover">
         <thead>
-          <tr>
-            <th>Title</th>
-            <th>Location</th>
+          <tr class="m-0">
+            <th class="w-75">Title</th>
+            <th class="w-25">Location</th>
           </tr>
         </thead>
         <tbody>
           {% for album in db_albums_diff %}
+          <tr class="m-0">
+            <td class="w-75">{{ album.title }}</td>
+            <td class="w-25"><a href="{{ album.location }}">Google Photos</a></td>
+          </tr>
+          {% else %}
           <tr>
-            <td>{{ album.title }}</td>
-            <td>{{ album.location }}</td>
+            <td class="w-75"><b>Albums in sync</b></td>
+            <td class="w-25"></td>
           </tr>
           {% endfor %}
         </tbody>
