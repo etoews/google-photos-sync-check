@@ -11,6 +11,7 @@
       <h1>Google Photos Sync Check</h1>
       <br/>
       <h2>Local Albums Diff</h1>
+      <p>These are the albums that are on your local disk but not on Google Photos.</p>
       <table class="table">
         <thead>
           <tr class="m-0">
@@ -22,7 +23,7 @@
           {% for album in local_albums_diff %}
           <tr class="m-0">
             <td class="w-75">{{ album.title }}</td>
-            <td class="w-25"><a href="{{ album.location }}">Google Photos</a></td>
+            <td class="w-25"><a href="{{ album.location }}" target="_blank">Local</a></td>
           </tr>
           {% else %}
           <tr>
@@ -35,6 +36,7 @@
       <br/>
 
       <h2>DB Albums Diff</h1>
+      <p>These are the albums that are on Google Photos but not on your local disk.</p>
       <table class="table table-hover">
         <thead>
           <tr class="m-0">
@@ -46,7 +48,7 @@
           {% for album in db_albums_diff %}
           <tr class="m-0">
             <td class="w-75">{{ album.title }}</td>
-            <td class="w-25"><a href="{{ album.location }}">Google Photos</a></td>
+            <td class="w-25"><a href="{{ album.location }}" target="_blank">Google Photos</a></td>
           </tr>
           {% else %}
           <tr>
