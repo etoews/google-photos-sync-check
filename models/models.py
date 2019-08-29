@@ -41,6 +41,7 @@ class Album(Base):
 
     def _normalise_title(self, title):
         # normalise the title because of how Google Takeout mangles the title
+        # TODO: warn on trailing space
         normalised_title = title.replace("_", "'")
         normalised_title = normalised_title[:50]
         return normalised_title

@@ -1,6 +1,6 @@
 # Google Photos Sync Check
 
-Python 3
+Google Photos Sync Check is ...
 
 https://developers.google.com/photos/library/guides/get-started#enable-the-api
 
@@ -27,7 +27,7 @@ python google-photos-sync-check.py sync_check ~/Pictures
 
 ```bash
 pipenv shell
-python -m pytest
+python -m pytest --cov=.
 ```
 
 ## Notable
@@ -52,7 +52,7 @@ Python lang features:
 * context manager
 * glob
 * lambda
-* logging?
+* TODO: logging
 
 Database:
 * SQLite
@@ -63,9 +63,9 @@ Database:
 
 Testing:
 * PyTest
+* PyTest-Cov
 * PyLint
-* Travis, ConcourseCI, CircleCI ???
-* coverage?
+* TODO: Travis, ConcourseCI, CircleCI ???
 
 Library:
 * Google API Python Client
@@ -73,3 +73,9 @@ Library:
 
 Websites:
 * [realpython.com](https://realpython.com/)
+* sqlachemy
+* stackoverflow
+* gp api site
+
+Related work:
+...
