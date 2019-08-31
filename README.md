@@ -60,6 +60,7 @@ Database:
   * indexes
   * relationships
   * collection_class
+  * sessions
 
 Testing:
 * PyTest

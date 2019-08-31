@@ -4,6 +4,7 @@
 reports/
 
 .vscode/
+_config.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

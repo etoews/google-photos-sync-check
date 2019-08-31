@@ -1,7 +1,7 @@
 import argparse, glob, os
 
 from pathlib import Path
-from os.path import join
+from os import path
 
 from httplib2 import Http
 from jinja2 import Environment, PackageLoader
@@ -70,7 +70,10 @@ def process_media_items_page(media_items_page):
 
     return media_items
 
-def get_local_albums(path):
+def get_local_albums(local_albums_path):
+    if not path.exists(local_albums_path):
+        raise FileNotFoundError(local_albums_path)
+
     albums = set()
     album_paths = glob.glob(f"{path}/**/[0-9][0-9][0-9][0-9][ -]*/", recursive=True)
 

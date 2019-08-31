@@ -12,6 +12,7 @@
       <br/>
       <h2>Local Albums Diff</h1>
       <p>These are the albums that are on your local disk but not on Google Photos.</p>
+      <p>Total albums on your local disk: {{ local_albums_diff | length }}</p>
       <table class="table">
         <thead>
           <tr class="m-0">
@@ -35,8 +36,9 @@
       </table>
       <br/>
 
-      <h2>DB Albums Diff</h1>
+      <h2>Google Photos Albums Diff</h1>
       <p>These are the albums that are on Google Photos but not on your local disk.</p>
+      <p>Total albums on Google Photos: {{ db_albums_diff | length }}</p>
       <table class="table table-hover">
         <thead>
           <tr class="m-0">
