@@ -1,4 +1,4 @@
-import argparse, glob, os
+import argparse, glob,logging, os
 
 from pathlib import Path
 from os import path
@@ -128,7 +128,7 @@ def rebuild_db(args):
             session.add_all(albums)
 
             for album in albums:
-                print(album.title)
+                logging.info(album.title)
                 media_items_pages = get_media_items_pages(photoslibrary, album)
 
                 for media_items_page in media_items_pages:
@@ -136,11 +136,13 @@ def rebuild_db(args):
                     session.add_all(media_items)
 
                     for media_item in media_items:
-                        print(media_item.filename)
+                        logging.info(media_item.filename)
                         album.add_media_item(media_item)
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--verbose', action='store_true', help="Print debugging messages")
+
     subparsers = parser.add_subparsers()
 
     parser_path_and_db = subparsers.add_parser('sync_check', help='Sync check between a local file path and the database of all albums and media items')
@@ -152,6 +154,19 @@ def get_args():
 
     return parser.parse_args()
 
+def configure_logging(verbose):
+    if verbose:
+        logging_level=logging.DEBUG
+    else:
+        logging_level=logging.INFO
+
+    logging.basicConfig(format='%(asctime)s.%(msecs)03d, %(levelname)s, %(message)s', datefmt='%Y-%m-%dT%H:%M:%S', level=logging_level)
+
+    logging.getLogger('googleapiclient.discovery').setLevel(logging.ERROR)
+    logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
+
 if __name__ == '__main__':
     args = get_args()
+    configure_logging(args.verbose)
+
     args.func(args)

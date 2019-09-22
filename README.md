@@ -19,8 +19,8 @@ find . -name "*(*).HEIC" -delete
 ```bash
 pipenv install --ignore-pipfile
 pipenv shell
-python google-photos-sync-check.py rebuild_db
-python google-photos-sync-check.py sync_check ~/Pictures
+python google-photos-sync-check.py --verbose rebuild_db
+python google-photos-sync-check.py --verbose sync_check ~/Pictures
 ```
 
 ## Test
@@ -37,6 +37,7 @@ Development:
 * VS Code
 * Python interpreter
 * Docs: [etoews.github.io/google-photos-sync-check/](https://etoews.github.io/google-photos-sync-check/)
+* TODO: method and module docs
 
 Python:
 * Python 3.7
@@ -52,7 +53,10 @@ Python lang features:
 * context manager
 * glob
 * lambda
-* TODO: logging
+* logging
+* TODO: memoize
+* TODO: signal handler
+* TODO: global exception handler
 
 Database:
 * SQLite
