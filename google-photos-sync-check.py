@@ -14,6 +14,8 @@ from models.models import Album, MediaItem
 
 SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
+logger = logging.getLogger(__name__)
+
 def authn_and_authz():
     store = file.Storage('client_token.json')
     creds = store.get()
@@ -128,7 +130,7 @@ def rebuild_db(args):
             session.add_all(albums)
 
             for album in albums:
-                logging.info(album.title)
+                logger.info("Album: %s", album.title)
                 media_items_pages = get_media_items_pages(photoslibrary, album)
 
                 for media_items_page in media_items_pages:
@@ -136,7 +138,7 @@ def rebuild_db(args):
                     session.add_all(media_items)
 
                     for media_item in media_items:
-                        logging.info(media_item.filename)
+                        logger.info("Item: %s", media_item.filename)
                         album.add_media_item(media_item)
 
 def get_args():
@@ -162,8 +164,8 @@ def configure_logging(verbose):
 
     logging.basicConfig(format='%(asctime)s.%(msecs)03d, %(levelname)s, %(message)s', datefmt='%Y-%m-%dT%H:%M:%S', level=logging_level)
 
-    logging.getLogger('googleapiclient.discovery').setLevel(logging.ERROR)
-    logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
+    logging.getLogger('oauth2client').setLevel(logging.ERROR)
+    logging.getLogger('googleapiclient').setLevel(logging.ERROR)
 
 if __name__ == '__main__':
     args = get_args()
