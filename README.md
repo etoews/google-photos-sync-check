@@ -54,8 +54,7 @@ Python lang features:
 * glob
 * lambda
 * logging
-* TODO: memoize
-* TODO: signal handler
+* signal handler
 * TODO: global exception handler
 
 Database:
@@ -77,10 +76,11 @@ Library:
 * Jinja
 
 Websites:
+* [Google Photos APIs](https://developers.google.com/photos)
 * [realpython.com](https://realpython.com/)
-* sqlachemy
-* stackoverflow
-* gp api site
+* [SQLAlchemy](https://docs.sqlalchemy.org/en/13/orm/tutorial.html)
+* [StackOverflow](https://stackoverflow.com)
 
 Related work:
-...
+* [Timeliner](https://github.com/mholt/timeliner)
+* [Perkeep](https://perkeep.org)

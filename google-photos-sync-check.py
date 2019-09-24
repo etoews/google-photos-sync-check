@@ -1,4 +1,4 @@
-import argparse, glob,logging, os
+import argparse, glob,logging, os, signal, sys
 
 from pathlib import Path
 from os import path
@@ -167,8 +167,16 @@ def configure_logging(verbose):
     logging.getLogger('oauth2client').setLevel(logging.ERROR)
     logging.getLogger('googleapiclient').setLevel(logging.ERROR)
 
+def signal_handler(signum, frame):
+    logger.info("Received signal %s. Exiting.", signal.Signals(signum).name)
+    sys.exit(0)
+
 if __name__ == '__main__':
     args = get_args()
+
     configure_logging(args.verbose)
+
+    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGINT, signal_handler)
 
     args.func(args)
