@@ -5,14 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+  </head>
   <body>
     <div class="container">
-      <h1>Google Photos Sync Check</h1>
       <br/>
-      <h2>Local Albums Diff</h1>
+      <h1>Google Photos Sync Check</h1>
+      <ul>
+        <li><a href="#local-albums-diff">Local Albums Diff</a></li>
+        <li><a href="#google-photos-albums-diff">Google Photos Albums Diff</a></li>
+      </ul>
+      <h2 id="local-albums-diff">Local Albums Diff</h1>
       <p>These are the albums that are on your local disk but not on Google Photos.</p>
-      <p>Total albums on your local disk: {{ local_albums_diff | length }}</p>
+      <p>Total: {{ local_albums_diff | length }}</p>
       <table class="table">
         <thead>
           <tr class="m-0">
@@ -36,9 +40,9 @@
       </table>
       <br/>
 
-      <h2>Google Photos Albums Diff</h1>
+      <h2 id="google-photos-albums-diff">Google Photos Albums Diff</h1>
       <p>These are the albums that are on Google Photos but not on your local disk.</p>
-      <p>Total albums on Google Photos: {{ db_albums_diff | length }}</p>
+      <p>Total: {{ db_albums_diff | length }}</p>
       <table class="table table-hover">
         <thead>
           <tr class="m-0">

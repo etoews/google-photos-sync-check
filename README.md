@@ -56,6 +56,9 @@ Python lang features:
 * logging
 * signal handler
 * TODO: global exception handler
+* decorators?
+* types?
+* ~memoize~
 
 Database:
 * SQLite
@@ -70,8 +73,10 @@ Testing:
 * PyTest-Cov
 * PyLint
 * TODO: Travis, ConcourseCI, CircleCI ???
+* Memory profile?
 
 Library:
+* [Pipfile](Pipfile)
 * Google API Python Client
 * Jinja
 

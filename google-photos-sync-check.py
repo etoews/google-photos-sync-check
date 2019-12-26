@@ -1,7 +1,7 @@
 import argparse, glob,logging, os, signal, sys
 
 from pathlib import Path
-from os import path
+from os import path, getcwd
 
 from httplib2 import Http
 from jinja2 import Environment, PackageLoader
@@ -76,8 +76,10 @@ def get_local_albums(local_albums_path):
     if not path.exists(local_albums_path):
         raise FileNotFoundError(local_albums_path)
 
+    logger.debug("Getting local albums from path: %s", local_albums_path)
+
     albums = set()
-    album_paths = glob.glob(f"{path}/**/[0-9][0-9][0-9][0-9][ -]*/", recursive=True)
+    album_paths = glob.glob(f"{local_albums_path}/**/[0-9][0-9][0-9][0-9][ -]*/", recursive=True)
 
     for album_path in album_paths:
         album = Album(None, Path(album_path).stem, album_path)
@@ -86,6 +88,8 @@ def get_local_albums(local_albums_path):
     return albums
 
 def get_db_albums(db):
+    logger.debug("Getting DB albums from DB: %s", db.name)
+
     with db.session_context() as session:
         albums = session.query(Album).filter(or_(Album.title.like("____ -%"), Album.title.like("____-__-__%")))
 
@@ -94,9 +98,11 @@ def get_db_albums(db):
 def sync_check(args):
     path = args.path
     local_albums = get_local_albums(path)
+    logger.info("Total number of local albums: %s", len(local_albums))
 
     db = Database('google-photos-sync-check')
     db_albums = get_db_albums(db)
+    logger.info("Total number of DB albums: %s", len(db_albums))
 
     local_albums_diff = local_albums.difference(db_albums)
     local_albums_diff = sorted(local_albums_diff, key=lambda x: getattr(x, 'title'))
@@ -115,6 +121,8 @@ def report(local_albums_diff, db_albums_diff):
     os.makedirs("reports", exist_ok=True)
     with open("reports/report.html", "w") as report_file:
         report_file.write(report)
+
+    logger.info("Report generated at: file://%s/reports/report.html", getcwd())
 
 def rebuild_db(args):
     photoslibrary = authn_and_authz()
