@@ -7,7 +7,7 @@ from httplib2 import Http
 from jinja2 import Environment, PackageLoader
 from googleapiclient.discovery import build
 from oauth2client import file, client, tools
-from sqlalchemy import or_
+from sqlalchemy import or_, exists
 
 from models.base import Database
 from models.models import Album, MediaItem
@@ -30,11 +30,14 @@ def get_album_pages(photoslibrary):
     albums_response = photoslibrary.albums().list().execute()
 
     while True:
-        yield albums_response.get('albums', [])
+        albums_page = albums_response.get('albums', [])
+        logger.debug("Got albums page. Total albums in page: %s", len(albums_page))
+
+        yield albums_page
 
         nextPageToken = albums_response.get('nextPageToken', None)
 
-        if not nextPageToken is None:
+        if nextPageToken:
             albums_response = photoslibrary.albums().list(pageToken=nextPageToken).execute()
         else:
             break
@@ -53,11 +56,14 @@ def get_media_items_pages(photoslibrary, album):
     media_items_response = photoslibrary.mediaItems().search(body=search_params).execute()
 
     while True:
-        yield media_items_response.get('mediaItems', [])
+        media_items_page = media_items_response.get('mediaItems', [])
+        logger.debug("Got media items page. Total media items in page: %s", len(media_items_page))
+
+        yield media_items_page
 
         nextPageToken = media_items_response.get('nextPageToken', None)
 
-        if not nextPageToken is None:
+        if nextPageToken:
             search_params['pageToken'] = nextPageToken
             media_items_response = photoslibrary.mediaItems().search(body=search_params).execute()
         else:
@@ -129,25 +135,33 @@ def rebuild_db(args):
 
     db = Database('google-photos-sync-check')
 
-    # in this algorithm, the unit of work is the page rather than the individual album or media item
     album_pages = get_album_pages(photoslibrary)
 
     with db.session_context() as session:
         for album_page in album_pages:
             albums = process_album_page(album_page)
-            session.add_all(albums)
 
             for album in albums:
-                logger.info("Album: %s", album.title)
                 media_items_pages = get_media_items_pages(photoslibrary, album)
 
                 for media_items_page in media_items_pages:
                     media_items = process_media_items_page(media_items_page)
-                    session.add_all(media_items)
 
                     for media_item in media_items:
-                        logger.info("Item: %s", media_item.filename)
                         album.add_media_item(media_item)
+
+                add_album_to_db(album, session)
+
+def add_album_to_db(album, session):
+    album_exists = session.query(exists().where(Album.title == album.title)).scalar()
+
+    if album_exists:
+        logger.debug("Album already exists: %s", album.title)
+    else:
+        session.add(album)
+        session.commit()
+
+        logger.info("Album added: %s", album.title)
 
 def get_args():
     parser = argparse.ArgumentParser()

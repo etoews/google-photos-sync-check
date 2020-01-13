@@ -6,14 +6,6 @@ https://developers.google.com/photos/library/guides/get-started#enable-the-api
 
 save client_secret.json to this dir
 
-## Clean
-
-```bash
-find . -name "*.DS_Store" -delete
-find . -name "*.json" -delete
-find . -name "*(*).HEIC" -delete
-```
-
 ## Run
 
 ```bash
@@ -62,6 +54,7 @@ Python lang features:
 
 Database:
 * SQLite
+* [SQLiteOnline](https://sqliteonline.com/)
 * SQLAlchemy
   * indexes
   * relationships
@@ -89,3 +82,12 @@ Websites:
 Related work:
 * [Timeliner](https://github.com/mholt/timeliner)
 * [Perkeep](https://perkeep.org)
+
+## Clean
+
+```bash
+find . -name "*.DS_Store" -delete
+find . -name "*.json" -delete
+find . -name "*(*).HEIC" -delete
+find . -name "*_original" -delete
+```
