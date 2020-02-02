@@ -42,6 +42,10 @@ def get_album_pages(photoslibrary):
         else:
             break
 
+# def get_albums(album_page):
+#     for album_raw in album_page:
+#         yield Album(album_raw['id'], album_raw['title'], album_raw['productUrl'])
+
 def process_album_page(album_page):
     albums = []
 
@@ -136,6 +140,8 @@ def rebuild_db(args):
     db = Database('google-photos-sync-check')
 
     album_pages = get_album_pages(photoslibrary)
+    # albums = get_albums(album_pages)
+    # media_items_pages = get_media_items_pages(photoslibrary, album)
 
     with db.session_context() as session:
         for album_page in album_pages:
