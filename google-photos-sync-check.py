@@ -92,7 +92,7 @@ def get_local_albums(local_albums_path):
     album_paths = glob.glob(f"{local_albums_path}/**/[0-9][0-9][0-9][0-9][ -]*/", recursive=True)
 
     for album_path in album_paths:
-        album = Album(None, Path(album_path).stem, album_path)
+        album = Album(None, Path(album_path).name, album_path)
         albums.add(album)
 
     return albums
