@@ -4,9 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+mypy = "*"
 pytest = "*"
-pylint = "*"
 pytest-cov = "*"
+flake8 = "*"
+flake8-mypy = "*"
+black = "*"
 
 [packages]
 google-api-python-client = "*"
@@ -15,4 +18,7 @@ sqlalchemy = "*"
 jinja2 = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
+
+[pipenv]
+allow_prereleases = true
