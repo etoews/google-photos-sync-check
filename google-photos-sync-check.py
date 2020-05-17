@@ -1,4 +1,4 @@
-import argparse, glob,logging, os, signal, sys
+import argparse, glob, logging, os, signal, sys  # noqa E401
 
 from pathlib import Path
 from os import path, getcwd
@@ -16,6 +16,7 @@ SCOPES = 'https://www.googleapis.com/auth/photoslibrary.readonly'
 
 logger = logging.getLogger(__name__)
 
+
 def authn_and_authz():
     store = file.Storage('client_token.json')
     creds = store.get()
@@ -25,6 +26,7 @@ def authn_and_authz():
         creds = tools.run_flow(flow, store)
 
     return build('photoslibrary', 'v1', http=creds.authorize(Http()))
+
 
 def get_album_pages(photoslibrary):
     albums_response = photoslibrary.albums().list().execute()
@@ -42,9 +44,6 @@ def get_album_pages(photoslibrary):
         else:
             break
 
-# def get_albums(album_page):
-#     for album_raw in album_page:
-#         yield Album(album_raw['id'], album_raw['title'], album_raw['productUrl'])
 
 def process_album_page(album_page):
     albums = []
@@ -54,6 +53,7 @@ def process_album_page(album_page):
         albums.append(album)
 
     return albums
+
 
 def get_media_items_pages(photoslibrary, album):
     search_params = {'albumId': album.id}
@@ -73,6 +73,7 @@ def get_media_items_pages(photoslibrary, album):
         else:
             break
 
+
 def process_media_items_page(media_items_page):
     media_items = []
 
@@ -81,6 +82,7 @@ def process_media_items_page(media_items_page):
         media_items.append(media_item)
 
     return media_items
+
 
 def get_local_albums(local_albums_path):
     if not path.exists(local_albums_path):
@@ -97,6 +99,7 @@ def get_local_albums(local_albums_path):
 
     return albums
 
+
 def get_db_albums(db):
     logger.debug("Getting DB albums from DB: %s", db.name)
 
@@ -104,6 +107,7 @@ def get_db_albums(db):
         albums = session.query(Album).filter(or_(Album.title.like("____ -%"), Album.title.like("____-__-__%")))
 
     return set(albums)
+
 
 def sync_check(args):
     path = args.path
@@ -122,6 +126,7 @@ def sync_check(args):
 
     report(local_albums_diff, db_albums_diff)
 
+
 def report(local_albums_diff, db_albums_diff):
     env = Environment(loader=PackageLoader('google-photos-sync-check', 'templates'))
     template = env.get_template('report.html')
@@ -134,14 +139,13 @@ def report(local_albums_diff, db_albums_diff):
 
     logger.info("Report generated at: file://%s/reports/report.html", getcwd())
 
+
 def rebuild_db(args):
     photoslibrary = authn_and_authz()
 
     db = Database('google-photos-sync-check')
 
     album_pages = get_album_pages(photoslibrary)
-    # albums = get_albums(album_pages)
-    # media_items_pages = get_media_items_pages(photoslibrary, album)
 
     with db.session_context() as session:
         for album_page in album_pages:
@@ -158,6 +162,7 @@ def rebuild_db(args):
 
                 add_album_to_db(album, session)
 
+
 def add_album_to_db(album, session):
     album_exists = session.query(exists().where(Album.title == album.title)).scalar()
 
@@ -169,35 +174,42 @@ def add_album_to_db(album, session):
 
         logger.info("Album added: %s", album.title)
 
+
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--verbose', action='store_true', help="Print debugging messages")
 
     subparsers = parser.add_subparsers()
 
-    parser_path_and_db = subparsers.add_parser('sync_check', help='Sync check between a local file path and the database of all albums and media items')
+    parser_path_and_db = subparsers.add_parser(
+        'sync_check', help='Sync check between a local file path and the database of all albums and media items')
     parser_path_and_db.add_argument('path', type=str, help='Local file path to photo albums')
     parser_path_and_db.set_defaults(func=sync_check)
 
-    parser_rebuild_db = subparsers.add_parser('rebuild_db', help='Rebuild the database of all albums and media items from the Google Photos API')
+    parser_rebuild_db = subparsers.add_parser(
+        'rebuild_db', help='Rebuild the database of all albums and media items from the Google Photos API')
     parser_rebuild_db.set_defaults(func=rebuild_db)
 
     return parser.parse_args()
 
+
 def configure_logging(verbose):
     if verbose:
-        logging_level=logging.DEBUG
+        logging_level = logging.DEBUG
     else:
-        logging_level=logging.INFO
+        logging_level = logging.INFO
 
-    logging.basicConfig(format='%(asctime)s.%(msecs)03d, %(levelname)s, %(message)s', datefmt='%Y-%m-%dT%H:%M:%S', level=logging_level)
+    logging.basicConfig(format='%(asctime)s.%(msecs)03d, %(levelname)s, %(message)s',
+                        datefmt='%Y-%m-%dT%H:%M:%S', level=logging_level)
 
     logging.getLogger('oauth2client').setLevel(logging.ERROR)
     logging.getLogger('googleapiclient').setLevel(logging.ERROR)
 
+
 def signal_handler(signum, frame):
     logger.info("Received signal %s. Exiting.", signal.Signals(signum).name)
     sys.exit(0)
+
 
 if __name__ == '__main__':
     args = get_args()

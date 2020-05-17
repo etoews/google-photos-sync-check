@@ -4,6 +4,7 @@ from sqlalchemy.orm.collections import attribute_mapped_collection
 
 from models.base import Base
 
+
 class Album(Base):
     __tablename__ = 'albums'
 
@@ -11,7 +12,8 @@ class Album(Base):
     title = Column(String, unique=True, index=True)
     location = Column(String)
 
-    media_items = relationship('MediaItem', back_populates='album', collection_class=attribute_mapped_collection('filename'))
+    media_items = relationship(
+        'MediaItem', back_populates='album', collection_class=attribute_mapped_collection('filename'))
 
     def __init__(self, id, title, location):
         self.id = id
@@ -19,7 +21,7 @@ class Album(Base):
         self.location = location
 
     def add_media_item(self, media_item):
-        if not media_item.filename in self.media_items:
+        if media_item.filename not in self.media_items:
             self.media_items[media_item.filename] = media_item
         else:
             unique_filename = self._get_unique_filename(media_item.filename)
@@ -34,7 +36,7 @@ class Album(Base):
         for n in range(1, 1000):
             # the "{filename_without_extension}({n}).{extension}" format is how Google Takeout does unique filenames
             unique_filename = f"{filename_without_extension}({n}).{extension}"
-            if not unique_filename in self.media_items:
+            if unique_filename not in self.media_items:
                 return unique_filename
             else:
                 continue
@@ -60,6 +62,7 @@ class Album(Base):
 
     def __hash__(self):
         return hash(self.title)
+
 
 class MediaItem(Base):
     __tablename__ = 'media_items'

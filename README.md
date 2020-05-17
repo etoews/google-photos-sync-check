@@ -32,7 +32,7 @@ Development:
 * TODO: method and module docs
 
 Python:
-* Python 3.7
+* Python 3
 * Pyenv
 * Pipenv
 

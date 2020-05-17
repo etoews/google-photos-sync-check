@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()
 
+
 class Database():
     def __init__(self, name):
         self.name = name
@@ -23,7 +24,7 @@ class Database():
         try:
             yield session
             session.commit()
-        except:
+        except:  # noqa E722
             session.rollback()
             raise
         finally:
