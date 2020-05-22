@@ -1,5 +1,8 @@
 # Google Photos Sync Check
 
+[![CircleCI](https://circleci.com/gh/etoews/google-photos-sync-check/tree/circleci-project-setup.svg?style=svg)](https://circleci.com/gh/etoews/google-photos-sync-check/tree/circleci-project-setup)
+
+
 Google Photos Sync Check is a utility to check that the albums you have in [Google Photos](https://photos.google.com/) (GP) are in sync with the albums you have locally on disk.
 
 This utility is part of my personal workflow for how I use GP. GP is my primary storage for all of my photos/videos whereas my home server is my backup storage.
@@ -70,7 +73,7 @@ Testing:
 * PyTest
 * PyTest-Cov
 * PyLint
-* TODO: Travis, ConcourseCI, CircleCI ???
+* CircleCI
 * TODO: Memory profile
 
 Library:
