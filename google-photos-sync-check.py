@@ -61,7 +61,8 @@ def get_media_items_pages(photoslibrary, album):
 
     while True:
         media_items_page = media_items_response.get('mediaItems', [])
-        logger.debug("Got media items page. Total media items in page: %s", len(media_items_page))
+        logger.debug("Got media items page for album: %s. Total media items in page: %s",
+                     album.title, len(media_items_page))
 
         yield media_items_page
 

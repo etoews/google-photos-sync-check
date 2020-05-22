@@ -1,10 +1,16 @@
 # Google Photos Sync Check
 
-Google Photos Sync Check is ...
+Google Photos Sync Check is a utility to check that the albums you have in [Google Photos](https://photos.google.com/) (GP) are in sync with the albums you have locally on disk.
 
-https://developers.google.com/photos/library/guides/get-started#enable-the-api
+This utility is part of my personal workflow for how I use GP. GP is my primary storage for all of my photos/videos whereas my home server is my backup storage.
 
-save client_secret.json to this dir
+Absolutely all of my photos/videos go into albums. Periodically I download all new albums I've uploaded to GP from my phone and other devices using [Google Takeout](https://photos.google.com/). I use this utility to make sure I haven't missed anything and that it's all in sync.
+
+## Enable the API
+
+In order to use this utility, follow the instructions in [Enable the Google Photos Library API](https://developers.google.com/photos/library/guides/get-started#enable-the-api).
+
+As part of that process you'll download a client_secret.json file. Save it to this dir.
 
 ## Run
 
@@ -48,8 +54,7 @@ Python lang features:
 * logging
 * signal handler
 * TODO: global exception handler
-* decorators?
-* types?
+* TODO: types
 * ~memoize~
 
 Database:
@@ -66,7 +71,7 @@ Testing:
 * PyTest-Cov
 * PyLint
 * TODO: Travis, ConcourseCI, CircleCI ???
-* Memory profile?
+* TODO: Memory profile
 
 Library:
 * [Pipfile](Pipfile)
@@ -84,6 +89,8 @@ Related work:
 * [Perkeep](https://perkeep.org)
 
 ## Clean
+
+Post Google Takeout cleanup.
 
 ```bash
 find . -name "*.DS_Store" -delete
