@@ -28,13 +28,6 @@ jobs:
           command: |
             pipenv run python -m pytest
 
-      # - python/load-cache
-      # - python/install-deps
-      # - python/save-cache
-      # - run:
-      #     command: python -m pytest
-      #     name: Test
-
 workflows:
   main:
     jobs:

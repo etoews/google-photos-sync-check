@@ -1,6 +1,6 @@
 # Google Photos Sync Check
 
-[![CircleCI](https://circleci.com/gh/etoews/google-photos-sync-check/tree/circleci-project-setup.svg?style=svg)](https://circleci.com/gh/etoews/google-photos-sync-check/tree/circleci-project-setup)
+[![CircleCI](https://circleci.com/gh/etoews/google-photos-sync-check.svg?style=svg)](https://circleci.com/gh/etoews/google-photos-sync-check)
 
 Google Photos Sync Check is a utility to check that the albums you have in [Google Photos](https://photos.google.com/) (GP) are in sync with the albums you have locally on disk.
 
