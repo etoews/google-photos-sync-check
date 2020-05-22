@@ -2,12 +2,22 @@
 
 [![CircleCI](https://circleci.com/gh/etoews/google-photos-sync-check/tree/circleci-project-setup.svg?style=svg)](https://circleci.com/gh/etoews/google-photos-sync-check/tree/circleci-project-setup)
 
-
 Google Photos Sync Check is a utility to check that the albums you have in [Google Photos](https://photos.google.com/) (GP) are in sync with the albums you have locally on disk.
 
 This utility is part of my personal workflow for how I use GP. GP is my primary storage for all of my photos/videos whereas my home server is my backup storage.
 
-Absolutely all of my photos/videos go into albums. Periodically I download all new albums I've uploaded to GP from my phone and other devices using [Google Takeout](https://photos.google.com/). I use this utility to make sure I haven't missed anything and that it's all in sync.
+Absolutely all of my photos/videos go into albums. Periodically I download all new albums I've uploaded to GP from my phone and other devices using [Google Takeout](https://photos.google.com/). I use this utility to make sure I haven't missed anything and that it's all in sync. 🔁
+
+<!-- TOC anchormode:github.com insertanchor:false -->
+
+* [Enable the API](#enable-the-api)
+* [Run](#run)
+* [Test](#test)
+* [Notable](#notable)
+* [Clean](#clean)
+
+<!-- /TOC -->
+
 
 ## Enable the API
 
@@ -18,7 +28,7 @@ As part of that process you'll download a client_secret.json file. Save it to th
 ## Run
 
 ```bash
-pipenv install --ignore-pipfile
+pipenv install --dev --ignore-pipfile
 pipenv shell
 python google-photos-sync-check.py --verbose rebuild_db
 python google-photos-sync-check.py --verbose sync_check ~/Pictures
