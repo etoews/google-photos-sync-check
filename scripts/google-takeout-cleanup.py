@@ -30,6 +30,13 @@ def cleanup(dry_run, path):
                     if not dry_run:
                         os.remove(mov_filename_path)
 
+            if filename.endswith('json'):
+                json_filename_path = os.path.join(dirpath, filename)
+                logger.info(f"Delete: {filename}")
+
+                if not dry_run:
+                    os.remove(json_filename_path)
+
 
 def get_args():
     parser = argparse.ArgumentParser()
