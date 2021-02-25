@@ -6,19 +6,19 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def cleanup(path):
-    for dirpath, dirnames, files in sorted(os.walk(path)):
+def cleanup(dry_run, path):
+    for dirpath, _, files in sorted(os.walk(path)):
         logger.info(f"Dir: {dirpath}")
         for filename in sorted(files):
-            logger.info(f"File:   {filename}")
-
             if filename.endswith('-edited.HEIC'):
                 normal_filename = filename.replace('-edited.HEIC', '.HEIC')
                 normal_filename_path = os.path.join(dirpath, normal_filename)
 
                 if os.path.exists(normal_filename_path):
                     logger.info(f"Delete: {normal_filename}")
-                    os.remove(normal_filename_path)
+
+                    if not dry_run:
+                        os.remove(normal_filename_path)
 
             if filename.endswith('HEIC'):
                 mov_filename = filename.replace('HEIC', 'MOV')
@@ -26,11 +26,14 @@ def cleanup(path):
 
                 if os.path.exists(mov_filename_path):
                     logger.info(f"Delete: {mov_filename}")
-                    os.remove(mov_filename_path)
+
+                    if not dry_run:
+                        os.remove(mov_filename_path)
 
 
 def get_args():
     parser = argparse.ArgumentParser()
+    parser.add_argument('--dry-run', action='store_true', help="Don't delete files")
     parser.add_argument('path', type=str, help='Local file path to takeout photo albums to cleanup')
 
     return parser.parse_args()
@@ -41,4 +44,4 @@ if __name__ == '__main__':
 
     args = get_args()
 
-    cleanup(args.path)
+    cleanup(args.dry_run, args.path)
