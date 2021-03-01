@@ -23,7 +23,8 @@ def authn_and_authz():
 
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
-        creds = tools.run_flow(flow, store)
+        flags = tools.argparser.parse_args(args=[])
+        creds = tools.run_flow(flow, store, flags)
 
     return build('photoslibrary', 'v1', http=creds.authorize(Http()))
 
