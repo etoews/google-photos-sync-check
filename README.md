@@ -106,8 +106,6 @@ Related work:
 Post Google Takeout cleanup.
 
 ```bash
-find . -name "*.DS_Store" -delete
-find . -name "*.json" -delete
-find . -name "*(*).HEIC" -delete
-find . -name "*_original" -delete
+pipenv shell
+python scripts/google-takeout-cleanup.py --dry-run ~/Pictures
 ```
