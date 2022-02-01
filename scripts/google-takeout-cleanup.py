@@ -30,6 +30,15 @@ def cleanup(dry_run, path):
                     if not dry_run:
                         os.remove(mov_filename_path)
 
+                mp4_filename = filename.replace('HEIC', 'MP4')
+                mp4_filename_path = os.path.join(dirpath, mp4_filename)
+
+                if os.path.exists(mp4_filename_path):
+                    logger.info(f"Delete: {mp4_filename}")
+
+                    if not dry_run:
+                        os.remove(mp4_filename_path)
+
             if filename.endswith('json'):
                 json_filename_path = os.path.join(dirpath, filename)
                 logger.info(f"Delete: {filename}")
