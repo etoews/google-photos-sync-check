@@ -23,7 +23,7 @@ Absolutely all of my photos/videos go into albums. Periodically I download all n
 
 In order to use this utility, follow the instructions in [Enable the Google Photos Library API](https://developers.google.com/photos/library/guides/get-started#enable-the-api).
 
-As part of that process you'll download a client_secret.json file. Save it to this dir.
+As part of that process you'll download a credentials.json file. Save it to this dir.
 
 ## Run
 

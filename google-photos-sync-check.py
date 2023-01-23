@@ -22,7 +22,7 @@ def authn_and_authz():
     creds = store.get()
 
     if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
+        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         flags = tools.argparser.parse_args(args=[])
         creds = tools.run_flow(flow, store, flags)
 
