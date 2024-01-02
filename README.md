@@ -40,7 +40,7 @@ If you get a `oauth2client.client.HttpAccessTokenRefreshError: invalid_grant: Ba
 ```bash
 pipenv install --dev --ignore-pipfile
 pipenv shell
-python google-photos-sync-check.py --verbose rebuild_db
+python google-photos-sync-check.py --verbose refresh_db
 python google-photos-sync-check.py --verbose sync_check ~/Pictures
 ```
 

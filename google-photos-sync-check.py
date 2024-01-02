@@ -142,7 +142,7 @@ def report(local_albums_diff, db_albums_diff):
     logger.info("Report generated at: file://%s/reports/report.html", getcwd())
 
 
-def rebuild_db(args):
+def refresh_db(args):
     photoslibrary = authn_and_authz()
 
     db = Database('google-photos-sync-check')
@@ -184,9 +184,9 @@ def get_args():
     parser_path_and_db.add_argument('path', type=str, help='Local file path to photo albums')
     parser_path_and_db.set_defaults(func=sync_check)
 
-    parser_rebuild_db = subparsers.add_parser(
-        'rebuild_db', help='Rebuild the database of all albums and media items from the Google Photos API')
-    parser_rebuild_db.set_defaults(func=rebuild_db)
+    parser_refresh_db = subparsers.add_parser(
+        'refresh_db', help='Refresh the database of all albums and media items from the Google Photos API')
+    parser_refresh_db.set_defaults(func=refresh_db)
 
     return parser.parse_args()
 
