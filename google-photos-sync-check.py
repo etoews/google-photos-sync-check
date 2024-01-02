@@ -22,11 +22,11 @@ def authn_and_authz():
     creds = store.get()
 
     if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
         flags = tools.argparser.parse_args(args=[])
         creds = tools.run_flow(flow, store, flags)
 
-    return build('photoslibrary', 'v1', http=creds.authorize(Http()))
+    return build('photoslibrary', 'v1', http=creds.authorize(Http()), static_discovery=False)
 
 
 def get_album_pages(photoslibrary):
@@ -154,27 +154,23 @@ def rebuild_db(args):
             albums = process_album_page(album_page)
 
             for album in albums:
-                media_items_pages = get_media_items_pages(photoslibrary, album)
+                album_exists = session.query(exists().where(Album.title == album.title)).scalar()
 
-                for media_items_page in media_items_pages:
-                    media_items = process_media_items_page(media_items_page)
+                if album_exists:
+                    logger.debug("Album already exists: %s", album.title)
+                else:
+                    media_items_pages = get_media_items_pages(photoslibrary, album)
 
-                    for media_item in media_items:
-                        album.add_media_item(media_item)
+                    for media_items_page in media_items_pages:
+                        media_items = process_media_items_page(media_items_page)
 
-                add_album_to_db(album, session)
+                        for media_item in media_items:
+                            album.add_media_item(media_item)
 
+                    session.add(album)
+                    session.commit()
 
-def add_album_to_db(album, session):
-    album_exists = session.query(exists().where(Album.title == album.title)).scalar()
-
-    if album_exists:
-        logger.debug("Album already exists: %s", album.title)
-    else:
-        session.add(album)
-        session.commit()
-
-        logger.info("Album added: %s", album.title)
+                    logger.info("Album added: %s", album.title)
 
 
 def get_args():
