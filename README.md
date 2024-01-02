@@ -10,11 +10,13 @@ Absolutely all of my photos/videos go into albums. Periodically I download all n
 
 <!-- TOC anchormode:github.com insertanchor:false -->
 
-* [Enable the API](#enable-the-api)
-* [Run](#run)
-* [Test](#test)
-* [Notable](#notable)
-* [Clean](#clean)
+* [Google Photos Sync Check](#google-photos-sync-check)
+  * [Enable the API](#enable-the-api)
+  * [Authenticate](#authenticate)
+  * [Run](#run)
+  * [Test](#test)
+  * [Notable](#notable)
+  * [Clean](#clean)
 
 <!-- /TOC -->
 
@@ -23,7 +25,15 @@ Absolutely all of my photos/videos go into albums. Periodically I download all n
 
 In order to use this utility, follow the instructions in [Enable the Google Photos Library API](https://developers.google.com/photos/library/guides/get-started#enable-the-api).
 
-As part of that process you'll download a credentials.json file. Save it to this dir.
+## Authenticate
+
+Follow the instructions to [Request an OAuth 2.0 client ID](https://developers.google.com/photos/library/guides/get-started#request-id) for the Google Photos API.
+
+As part of that process you'll download a `client_secret_xxxxx.json` file. Name it `client_secret.json` and save it to this dir.
+
+### HttpAccessTokenRefreshError
+
+If you get a `oauth2client.client.HttpAccessTokenRefreshError: invalid_grant: Bad Request` error when executing the script, delete the `client_token.json` file and execute the script again.
 
 ## Run
 
