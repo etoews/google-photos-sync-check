@@ -29,7 +29,14 @@ In order to use this utility, follow the instructions in [Enable the Google Phot
 
 Follow the instructions to [Request an OAuth 2.0 client ID](https://developers.google.com/photos/library/guides/get-started#request-id) for the Google Photos API.
 
-As part of that process you'll download a `client_secret_xxxxx.json` file. Name it `client_secret.json` and save it to this dir.
+When you Create Credentials, choose these options
+
+1. OAuth Client ID
+1. Application type: Web application
+1. Name: Google Photos Sync Check
+1. Authorized redirect URIs: http://localhost:8080/
+
+Download the `client_secret_xxxxx.json` file. Name it `client_secret.json` and save it to this dir.
 
 ### HttpAccessTokenRefreshError
 
