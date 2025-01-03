@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run:
           command: |
-            sudo pip install pipenv
+            pip install pipenv
             pipenv install --dev --ignore-pipfile
       - run:
           command: |
